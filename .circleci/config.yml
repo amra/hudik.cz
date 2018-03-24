@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.2.9
+    working_directory:  /home/circleci/hudik.cz
+    steps:
+      - checkout
+      - run:
+          name: Install AWS-CLI & Jekyll
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install -y python-pip python-dev jekyll
+      - run: 
+          name: Get pip
+          command: |
+            sudo pip install awscli
+      - run:
+          name: Jekyll Build step to create _site
+          command: |
+            jekyll build
+            ls -al /home/circleci/hudik.cz/_site
+      - run: 
+          name: Sync to S3 bucket
+          command: aws s3 sync $CIRCLE_WORKING_DIRECTORY/_site/ s3://hudik.cz/ --delete --region eu-west-1
