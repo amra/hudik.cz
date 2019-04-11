@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.2.9
+      - image: circleci/ruby:2.5.5
     working_directory:  /home/circleci/hudik.cz
     steps:
       - checkout
@@ -23,3 +23,4 @@ jobs:
       - run: 
           name: Sync to S3 bucket
           command: aws s3 sync $CIRCLE_WORKING_DIRECTORY/_site/ s3://hudik.cz/ --delete --region eu-west-1 --acl public-read
+
